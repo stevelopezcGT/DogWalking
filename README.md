@@ -32,7 +32,7 @@ The goal of this project is to demonstrate **senior-level WinForms development p
 * **UI:** Windows Forms (WinForms)
 * **ORM:** Entity Framework 6 (Code First)
 * **Database:** SQL Server LocalDB
-* **Testing (planned):** MSTest + Moq
+* **Testing:** MSTest + Moq
 
 ---
 
@@ -44,7 +44,7 @@ DogWalking.sln
 ├─ DogWalking.WinForms   // UI layer (Forms, user interaction)
 ├─ DogWalking.BL         // Business Layer (services, validators, DTOs)
 ├─ DogWalking.DL         // Data Layer (EF, entities, repositories)
-└─ DogWalking.Tests      // Unit tests (to be added)
+└─ DogWalking.Tests      // Unit tests (validators and services)
 ```
 
 ### Layer Responsibilities
@@ -139,15 +139,18 @@ This avoids unnecessary complexity while keeping the code testable and maintaina
 
 ---
 
-## Unit Testing Strategy (Planned)
+## Unit Testing Strategy
 
-Unit tests are designed to focus on:
+Unit tests are implemented and cover **all Business Layer services and validators**, focusing on observable behavior and decision points rather than infrastructure concerns.
 
-* Business Layer validators
-* Core service logic
-* Edge cases and error scenarios
+Tests include:
 
-Repositories are mocked using interfaces, allowing tests to run without a database or Entity Framework.
+* Constructor and null-argument guards
+* Validation failures and success cases
+* Service behavior and repository interaction
+* Edge cases (null, empty, whitespace inputs)
+
+Repositories are mocked using interfaces and **MockBehavior.Strict** to ensure no unexpected interactions occur. All tests run without a database or Entity Framework dependency.
 
 ---
 
@@ -173,19 +176,16 @@ The database will be created and migrated automatically on first run.
 
 ---
 
-## Next Steps / Improvements
+## Scope Note
 
-If more time were available, the following improvements would be prioritized:
+This README intentionally documents **only what is implemented and validated at this point**.
 
-* Additional unit test coverage
-* More advanced search and filtering options
-* Improved error handling and logging
-* Enhanced UI feedback and usability
-* Role-based security model
-* Reporting and analytics features
+Planned or potential future enhancements (such as auditing, soft deletes, extended security, or reporting features) are **deliberately excluded** from this document until they are fully implemented and verified.
+
+This approach ensures the documentation accurately reflects the current state of the codebase and avoids assumptions about incomplete or future work.
 
 ---
 
 ## AI Usage Note
 
-AI tools were used as a documentation assistant. All architectural decisions, trade-offs, and final code were intentionally built manually to ensure consistency and correctness.
+AI tools were used as a development and documentation assistant. All architectural decisions, trade-offs, unit tests, and final implementations were intentionally reviewed and written by the author to ensure correctness, consistency, and alignment with real-world WinForms ERP practices.
