@@ -1,54 +1,38 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace DogWalking.DL.Entities
 {
     /// <summary>
-    /// Represents a client of the dog walking service.
+    /// Data entity for a client.
     /// </summary>
-    /// <remarks>
-    /// A <see cref="Client"/> may own zero or more <see cref="Dog"/> entities.
-    /// This class is a simple data entity used by the data layer.
-    /// </remarks>
     public class Client
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Client"/> class.
+        /// Initializes a new instance of <see cref="Client"/>.
         /// </summary>
-        /// <remarks>
-        /// The constructor ensures the <see cref="Dogs"/> collection is initialized to an empty
-        /// <see cref="HashSet{Dog}"/> so callers can safely add or enumerate dogs without
-        /// checking for <c>null</c>.
-        /// </remarks>
-        public Client() 
+        public Client()
         {
             Dogs = new HashSet<Dog>();
         }
 
         /// <summary>
-        /// Gets or sets the unique identifier for the client.
+        /// Gets or sets the client id.
         /// </summary>
-        /// <value>An integer that uniquely identifies the client.</value>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the client's full name.
+        /// Gets or sets the client name.
         /// </summary>
-        /// <value>A non-null string containing the client's name. Defaults to an empty string.</value>
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the client's phone number.
+        /// Gets or sets the client phone number.
         /// </summary>
-        /// <value>A non-null string containing the client's phone number. Defaults to an empty string.</value>
         public string Phone { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the collection of dogs owned by the client.
+        /// Gets or sets client dogs.
         /// </summary>
-        /// <value>
-        /// A collection of <see cref="Dog"/> instances associated with the client.
-        /// This property may be null if the collection has not been initialized by the data layer.
-        /// </value>
         public ICollection<Dog> Dogs { get; set; }
     }
 }

@@ -1,47 +1,37 @@
-﻿using DogWalking.BL.DTOs;
+using DogWalking.BL.DTOs;
 using DogWalking.BL.Validators;
 using DogWalking.DL.Entities;
 using DogWalking.DL.Repositories;
+using System;
 using System.Collections.Generic;
 
 namespace DogWalking.BL.Services
 {
     /// <summary>
-    /// Provides business logic for managing clients.
+    /// Service for client operations.
     /// </summary>
-    /// <remarks>
-    /// This service acts as the business layer façade for client operations.
-    /// It validates incoming DTOs and delegates persistence concerns to an
-    /// injected <see cref="IClientRepository"/>.
-    /// </remarks>
     public class ClientService
     {
         private readonly IClientRepository _clientRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientService"/> class.
+        /// Initializes a new instance of <see cref="ClientService"/>.
         /// </summary>
-        /// <param name="clientRepository">
-        /// The repository used to persist and retrieve <see cref="Client"/> entities.
-        /// This dependency is expected to be provided by the caller (typically via DI).
-        /// </param>
+        /// <param name="clientRepository">Client repository instance.</param>
         public ClientService(IClientRepository clientRepository)
         {
-            _clientRepository = clientRepository;
+            _clientRepository = clientRepository ?? throw new ArgumentNullException(nameof(clientRepository));
         }
 
         /// <summary>
-        /// Validates the provided client DTO and adds a new client to the repository.
+        /// Validates and adds a client.
         /// </summary>
-        /// <param name="dto">The client data transfer object containing the information to persist.</param>
-        /// <remarks>
-        /// This method calls <see cref="ClientValidator.Validate"/> to perform validation.
-        /// Validation may throw an exception if the <paramref name="dto"/> is invalid.
-        /// After successful validation a new <see cref="Client"/> entity is created and
-        /// passed to the configured repository via <see cref="IClientRepository.Add"/>.
-        /// </remarks>
+        /// <param name="dto">Client data.</param>
         public void Add(ClientDto dto)
         {
+            if (dto == null)
+                throw new ArgumentNullException(nameof(dto));
+
             ClientValidator.Validate(dto);
 
             _clientRepository.Add(new Client
@@ -52,29 +42,19 @@ namespace DogWalking.BL.Services
         }
 
         /// <summary>
-        /// Retrieves all clients from the repository.
+        /// Gets all clients.
         /// </summary>
-        /// <returns>A list containing all <see cref="Client"/> entities.</returns>
+        /// <returns>List of clients.</returns>
         public List<Client> GetAll()
         {
             return _clientRepository.GetAll();
         }
 
         /// <summary>
-        /// Searches for clients that match the provided search term.
+        /// Searches clients by term.
         /// </summary>
-        /// <param name="searchTerm">
-        /// The search phrase to match against client data. If <c>null</c>, empty, or whitespace,
-        /// the method returns all clients.
-        /// </param>
-        /// <returns>
-        /// A list of <see cref="Client"/> entities that match the search criteria,
-        /// or all clients if the search term is blank.
-        /// </returns>
-        /// <remarks>
-        /// The provided <paramref name="searchTerm"/> is trimmed before being passed to the repository.
-        /// The actual search logic is delegated to <see cref="IClientRepository.Search(string)"/>.
-        /// </remarks>
+        /// <param name="searchTerm">Search term.</param>
+        /// <returns>Matching clients or all clients when the term is blank.</returns>
         public List<Client> Search(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
@@ -84,13 +64,9 @@ namespace DogWalking.BL.Services
         }
 
         /// <summary>
-        /// Deletes the client with the specified identifier.
+        /// Deletes a client by id.
         /// </summary>
-        /// <param name="clientId">The identifier of the client to delete.</param>
-        /// <remarks>
-        /// Deletion is delegated to <see cref="IClientRepository.Delete(int)"/>.
-        /// Repository behavior for non-existent identifiers (e.g. no-op or exception) depends on the repository implementation.
-        /// </remarks>
+        /// <param name="clientId">Client id.</param>
         public void Delete(int clientId)
         {
             _clientRepository.Delete(clientId);
