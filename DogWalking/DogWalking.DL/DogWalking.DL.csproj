@@ -62,6 +62,16 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Walk.cs" />
+    <Compile Include="Repositories\Base\IRepositoryBase.cs" />
+    <Compile Include="Repositories\Base\RepositoryBase.cs" />
+    <Compile Include="Repositories\WalkRepository.cs" />
+    <Compile Include="Repositories\DogRepository.cs" />
+    <Compile Include="Repositories\ClientRepository.cs" />
+    <Compile Include="Repositories\IWalkRepository.cs" />
+    <Compile Include="Repositories\IDogRepository.cs" />
+    <Compile Include="Repositories\IClientRepository.cs" />
+    <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
