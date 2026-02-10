@@ -5,7 +5,7 @@ namespace DogWalking.DL.Entities
     /// <summary>
     /// Data entity for a client.
     /// </summary>
-    public class Client
+    public class Client : BaseEntity
     {
         /// <summary>
         /// Initializes a new instance of <see cref="Client"/>.
