@@ -1,21 +1,18 @@
-﻿using DogWalking.DL.Entities;
+using DogWalking.DL.Entities;
 
 namespace DogWalking.DL.Repositories
 {
     /// <summary>
-    /// Defines repository operations for user entities.
+    /// Repository contract for users.
     /// </summary>
     public interface IUserRepository
     {
         /// <summary>
-        /// Retrieves a <see cref="User"/> that matches the specified credentials.
+        /// Gets a user by credentials.
         /// </summary>
-        /// <param name="username">The username to locate. This is typically the user's login identifier.</param>
-        /// <param name="password">The password to validate for the specified <paramref name="username"/>.</param>
-        /// <returns>
-        /// The <see cref="User"/> that matches the supplied credentials, or <c>null</c> if no matching user is found
-        /// or the credentials are invalid.
-        /// </returns>
+        /// <param name="username">Username.</param>
+        /// <param name="password">Password.</param>
+        /// <returns>Matching user or <c>null</c>.</returns>
         User GetByCredentials(string username, string password);
     }
 }

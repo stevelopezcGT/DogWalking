@@ -1,40 +1,35 @@
-﻿using DogWalking.BL.DTOs;
+using DogWalking.BL.DTOs;
 using DogWalking.BL.Validators;
 using DogWalking.DL.Entities;
 using DogWalking.DL.Repositories;
+using System;
 
 namespace DogWalking.BL.Services
 {
     /// <summary>
-    /// Provides business logic for creating and managing walk records.
-    /// Orchestrates validation of incoming data and delegates persistence to an <see cref="IWalkRepository"/>.
+    /// Service for walk operations.
     /// </summary>
     public class WalkService
     {
         private readonly IWalkRepository _walkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WalkService"/> class.
+        /// Initializes a new instance of <see cref="WalkService"/>.
         /// </summary>
-        /// <param name="walkRepository">The repository used to persist <see cref="Walk"/> entities. Must not be <c>null</c>.</param>
+        /// <param name="walkRepository">Walk repository instance.</param>
         public WalkService(IWalkRepository walkRepository)
         {
-            _walkRepository = walkRepository;
+            _walkRepository = walkRepository ?? throw new ArgumentNullException(nameof(walkRepository));
         }
 
         /// <summary>
-        /// Validates the specified <see cref="WalkDto"/> and adds a corresponding <see cref="Walk"/> entity to the repository.
+        /// Validates and adds a walk.
         /// </summary>
-        /// <param name="dto">The data transfer object describing the walk to add. Must not be <c>null</c>.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="dto"/> is <c>null</c>.</exception>
-        /// <exception cref="System.Exception">May be thrown if validation fails or if the repository operation fails.</exception>
+        /// <param name="dto">Walk data.</param>
         public void Add(WalkDto dto)
         {
-            // Guard clause: make null expectation explicit for documentation and clarity.
             if (dto == null)
-            {
-                throw new System.ArgumentNullException(nameof(dto));
-            }
+                throw new ArgumentNullException(nameof(dto));
 
             WalkValidator.Validate(dto);
 

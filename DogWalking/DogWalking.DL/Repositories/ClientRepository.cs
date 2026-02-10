@@ -1,4 +1,4 @@
-﻿using DogWalking.DL.Context;
+using DogWalking.DL.Context;
 using DogWalking.DL.Entities;
 using DogWalking.DL.Repositories.Base;
 using System.Collections.Generic;
@@ -7,32 +7,21 @@ using System.Linq;
 namespace DogWalking.DL.Repositories
 {
     /// <summary>
-    /// Repository providing data access operations for <see cref="Client"/> entities.
+    /// Repository implementation for clients.
     /// </summary>
-    /// <remarks>
-    /// Inherits common CRUD behavior from <see cref="RepositoryBase{Client}"/>.
-    /// This repository constructs its own <see cref="DogWalkingContext"/> instance.
-    /// Consumers should be aware that the context's lifetime is managed by this repository
-    /// and that changes are not persisted until <c>SaveChanges</c> is invoked on the context
-    /// (typically through repository base methods or an external unit of work).
-    /// </remarks>
     public class ClientRepository : RepositoryBase<Client>, IClientRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientRepository"/> class
-        /// using a new instance of <see cref="DogWalkingContext"/>.
+        /// Initializes a new instance of <see cref="ClientRepository"/>.
         /// </summary>
         public ClientRepository() : base(new DogWalkingContext())
         {
         }
 
         /// <summary>
-        /// Retrieves all clients from the data store.
+        /// Gets all clients.
         /// </summary>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="Client"/> containing all clients.
-        /// Entities are returned with no change tracking applied.
-        /// </returns>
+        /// <returns>List of clients.</returns>
         public List<Client> GetAll()
         {
             return _context.Clients
@@ -41,15 +30,10 @@ namespace DogWalking.DL.Repositories
         }
 
         /// <summary>
-        /// Searches for clients whose name contains the specified search term
-        /// or who have associated dogs whose names contain the specified term.
+        /// Searches clients by term.
         /// </summary>
-        /// <param name="searchTerm">The substring to search for in client names and dog names.</param>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="Client"/> that match the search criteria.
-        /// Matching is performed using <c>Contains</c> and therefore follows the database collation rules
-        /// (case-sensitivity and culture-specific behavior depend on the database configuration).
-        /// </returns>
+        /// <param name="searchTerm">Search term.</param>
+        /// <returns>Matching clients.</returns>
         public List<Client> Search(string searchTerm)
         {
             return _context.Clients
@@ -62,13 +46,9 @@ namespace DogWalking.DL.Repositories
         }
 
         /// <summary>
-        /// Deletes the client with the specified identifier from the context if it exists.
+        /// Deletes a client by id.
         /// </summary>
-        /// <param name="clientId">The identifier of the client to delete.</param>
-        /// <remarks>
-        /// This method removes the entity from the context but does not persist changes to the database.
-        /// Callers must ensure that <c>SaveChanges</c> is invoked (directly or via a unit of work) to commit the deletion.
-        /// </remarks>
+        /// <param name="clientId">Client id.</param>
         public void Delete(int clientId)
         {
             var entity = _context.Clients.Find(clientId);

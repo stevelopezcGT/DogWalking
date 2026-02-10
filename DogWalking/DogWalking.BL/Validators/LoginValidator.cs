@@ -1,28 +1,17 @@
-﻿using DogWalking.BL.DTOs;
+using DogWalking.BL.DTOs;
 using System;
 
 namespace DogWalking.BL.Validators
 {
     /// <summary>
-    /// Provides validation logic for login requests.
+    /// Validates login data.
     /// </summary>
-    /// <remarks>
-    /// This static validator performs basic non-empty checks on the provided
-    /// <see cref="LoginDto"/>. It throws <see cref="ArgumentException"/> when
-    /// required fields are missing or consist only of whitespace.
-    /// </remarks>
     public static class LoginValidator
     {
         /// <summary>
-        /// Validates the specified <see cref="LoginDto"/>.
+        /// Validates a login DTO.
         /// </summary>
-        /// <param name="dto">The login data transfer object to validate. Must not be <c>null</c>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="dto"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown when required properties on the <paramref name="dto"/> are missing or contain only whitespace:
-        /// - "Username is required." if <see cref="LoginDto.Username"/> is null, empty, or whitespace.
-        /// - "Password is required." if <see cref="LoginDto.Password"/> is null, empty, or whitespace.
-        /// </exception>
+        /// <param name="dto">Login data.</param>
         public static void Validate(LoginDto dto)
         {
             if (dto == null)
