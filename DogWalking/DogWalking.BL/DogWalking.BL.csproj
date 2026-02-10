@@ -41,7 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\ClientDto.cs" />
+    <Compile Include="DTOs\DogDto.cs" />
+    <Compile Include="DTOs\LoginDto.cs" />
+    <Compile Include="DTOs\WalkDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AuthService.cs" />
+    <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\DogService.cs" />
+    <Compile Include="Services\WalkService.cs" />
+    <Compile Include="Validators\ClientValidator.cs" />
+    <Compile Include="Validators\DogValidator.cs" />
+    <Compile Include="Validators\LoginValidator.cs" />
+    <Compile Include="Validators\WalkValidator.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DogWalking.DL\DogWalking.DL.csproj">
+      <Project>{FFA60A27-56D2-4377-8E5F-ABFC616EC7F6}</Project>
+      <Name>DogWalking.DL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
