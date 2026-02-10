@@ -5,7 +5,7 @@ namespace DogWalking.DL.Entities
     /// <summary>
     /// Data entity for a walk.
     /// </summary>
-    public class Walk
+    public class Walk : BaseEntity 
     {
         /// <summary>
         /// Gets or sets the walk id.

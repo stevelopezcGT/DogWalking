@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\DogWalkingContext.cs" />
+    <Compile Include="Entities\BaseEntity.cs" />
     <Compile Include="Entities\Client.cs" />
     <Compile Include="Entities\Dog.cs" />
     <Compile Include="Entities\User.cs" />
