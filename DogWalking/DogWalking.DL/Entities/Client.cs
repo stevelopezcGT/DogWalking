@@ -16,11 +16,6 @@ namespace DogWalking.DL.Entities
         }
 
         /// <summary>
-        /// Gets or sets the client id.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the client name.
         /// </summary>
         public string Name { get; set; } = string.Empty;

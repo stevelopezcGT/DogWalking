@@ -60,6 +60,10 @@
     <Compile Include="Migrations\202602092214151_InitialEntitiesCreation.Designer.cs">
       <DependentUpon>202602092214151_InitialEntitiesCreation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602102330507_AddAuditFieldsAndSoftDelete.cs" />
+    <Compile Include="Migrations\202602102330507_AddAuditFieldsAndSoftDelete.Designer.cs">
+      <DependentUpon>202602102330507_AddAuditFieldsAndSoftDelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Walk.cs" />
@@ -81,6 +85,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202602092214151_InitialEntitiesCreation.resx">
       <DependentUpon>202602092214151_InitialEntitiesCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602102330507_AddAuditFieldsAndSoftDelete.resx">
+      <DependentUpon>202602102330507_AddAuditFieldsAndSoftDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

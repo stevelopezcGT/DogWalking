@@ -8,11 +8,6 @@ namespace DogWalking.DL.Entities
     public class Dog : BaseEntity
     {
         /// <summary>
-        /// Gets or sets the dog id.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the client id.
         /// </summary>
         public int ClientId { get; set; }

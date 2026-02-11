@@ -6,11 +6,6 @@ namespace DogWalking.DL.Entities
     public class User : BaseEntity
     {
         /// <summary>
-        /// Gets or sets the user id.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the username.
         /// </summary>
         public string Username { get; set; }
