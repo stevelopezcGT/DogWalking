@@ -25,8 +25,7 @@ namespace DogWalking.DL.Repositories
         /// <returns>Matching user or <c>null</c>.</returns>
         public User GetByCredentials(string username, string password)
         {
-            return _context
-                .Users
+            return Query()
                 .FirstOrDefault(u =>
                     u.Username == username &&
                     u.Password == password);

@@ -20,6 +20,8 @@ namespace DogWalking.DL.Repositories
         /// <returns>List of dogs.</returns>
         List<Dog> GetAll();
 
+        List<Dog> GetByClient(int clientId);
+
         /// <summary>
         /// Searches dogs by term.
         /// </summary>

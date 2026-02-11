@@ -3,6 +3,8 @@ using DogWalking.DL.Entities;
 using DogWalking.DL.Repositories.Base;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
+
 
 namespace DogWalking.DL.Repositories
 {
@@ -24,7 +26,7 @@ namespace DogWalking.DL.Repositories
         /// <returns>List of walks.</returns>
         public List<Walk> GetAll()
         {
-            return _context.Walks
+            return Query()
                 .AsNoTracking()
                 .ToList();
         }
@@ -36,7 +38,7 @@ namespace DogWalking.DL.Repositories
         /// <returns>Matching walks.</returns>
         public List<Walk> Search(string searchTerm)
         {
-            return _context.Walks
+            return Query()
                 .AsNoTracking()
                 .Where(c =>
                     c.Dog.Name.Contains(searchTerm)
@@ -50,10 +52,10 @@ namespace DogWalking.DL.Repositories
         /// <param name="walkId">Walk id.</param>
         public void Delete(int walkId)
         {
-            var entity = _context.Walks.Find(walkId);
+            var entity = GetById(walkId);
             if (entity != null)
             {
-                Remove(entity);
+                SoftDelete(entity);
             }
         }
     }

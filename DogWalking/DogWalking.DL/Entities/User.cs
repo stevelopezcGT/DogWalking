@@ -3,13 +3,8 @@ namespace DogWalking.DL.Entities
     /// <summary>
     /// Data entity for a user.
     /// </summary>
-    public class User
+    public class User : BaseEntity
     {
-        /// <summary>
-        /// Gets or sets the user id.
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// Gets or sets the username.
         /// </summary>

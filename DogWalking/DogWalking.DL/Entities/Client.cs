@@ -5,7 +5,7 @@ namespace DogWalking.DL.Entities
     /// <summary>
     /// Data entity for a client.
     /// </summary>
-    public class Client
+    public class Client : BaseEntity
     {
         /// <summary>
         /// Initializes a new instance of <see cref="Client"/>.
@@ -14,11 +14,6 @@ namespace DogWalking.DL.Entities
         {
             Dogs = new HashSet<Dog>();
         }
-
-        /// <summary>
-        /// Gets or sets the client id.
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the client name.

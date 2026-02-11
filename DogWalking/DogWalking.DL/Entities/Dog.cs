@@ -5,13 +5,8 @@ namespace DogWalking.DL.Entities
     /// <summary>
     /// Data entity for a dog.
     /// </summary>
-    public class Dog
+    public class Dog : BaseEntity
     {
-        /// <summary>
-        /// Gets or sets the dog id.
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// Gets or sets the client id.
         /// </summary>

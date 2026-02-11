@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace DogWalking.DL.Repositories.Base
 {
     /// <summary>
@@ -6,6 +8,7 @@ namespace DogWalking.DL.Repositories.Base
     /// <typeparam name="T">Entity type.</typeparam>
     internal interface IRepositoryBase<T> where T : class
     {
+
         /// <summary>
         /// Adds an entity.
         /// </summary>
@@ -13,9 +16,15 @@ namespace DogWalking.DL.Repositories.Base
         void Add(T entity);
 
         /// <summary>
+        /// Updates an entity.
+        /// </summary>
+        /// <param name="entity">Entity to update.</param>
+        void Update(T entity);
+
+        /// <summary>
         /// Removes an entity.
         /// </summary>
         /// <param name="entity">Entity to remove.</param>
-        void Remove(T entity);
+        void SoftDelete(T entity);
     }
 }
