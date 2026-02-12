@@ -5,6 +5,7 @@ namespace DogWalking.BL.DTOs
     /// </summary>
     public class ClientDto
     {
+        public  int  Id { get; set; }
         /// <summary>
         /// Gets or sets the client name.
         /// </summary>

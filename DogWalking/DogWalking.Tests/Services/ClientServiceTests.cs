@@ -102,7 +102,8 @@ namespace DogWalking.Tests.Services
 
             var result = service.GetAll();
 
-            Assert.AreSame(expected, result);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("Jane", result[0].Name);
             repository.Verify(r => r.GetAll(), Times.Once);
         }
 
@@ -117,7 +118,7 @@ namespace DogWalking.Tests.Services
 
             var result = service.Search(null);
 
-            Assert.AreSame(expected, result);
+            Assert.AreEqual(0, result.Count);
             repository.Verify(r => r.GetAll(), Times.Once);
             repository.Verify(r => r.Search(It.IsAny<string>()), Times.Never);
         }
@@ -133,7 +134,7 @@ namespace DogWalking.Tests.Services
 
             var result = service.Search("   ");
 
-            Assert.AreSame(expected, result);
+            Assert.AreEqual(0, result.Count);
             repository.Verify(r => r.GetAll(), Times.Once);
             repository.Verify(r => r.Search(It.IsAny<string>()), Times.Never);
         }
@@ -149,7 +150,8 @@ namespace DogWalking.Tests.Services
 
             var result = service.Search("  john  ");
 
-            Assert.AreSame(expected, result);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("John", result[0].Name);
             repository.Verify(r => r.Search("john"), Times.Once);
             repository.Verify(r => r.GetAll(), Times.Never);
         }
@@ -160,11 +162,103 @@ namespace DogWalking.Tests.Services
         [TestMethod]
         public void Delete_ShouldCallRepository_WithClientId()
         {
-            var (service, repository) = CreateService(r => r.Setup(x => x.Delete(7)));
+            var (service, repository) = CreateService(r =>
+            {
+                r.Setup(x => x.GetById(7)).Returns(new Client { Id = 7, Name = "John", Phone = "555" });
+                r.Setup(x => x.Delete(7));
+            });
 
             service.Delete(7);
 
+            repository.Verify(r => r.GetById(7), Times.Once);
             repository.Verify(r => r.Delete(7), Times.Once);
         }
+
+        [TestMethod]
+        public void Update_ShouldThrow_WhenDtoIsNull()
+        {
+            var (service, repository) = CreateService();
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                service.Update(1, null));
+
+            repository.Verify(r => r.Update(It.IsAny<Client>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Update_ShouldThrow_WhenDtoIsInvalid()
+        {
+            var (service, repository) = CreateService();
+            var dto = new ClientDto { Name = "", Phone = "123" };
+
+            Assert.ThrowsException<ArgumentException>(() =>
+                service.Update(1, dto));
+
+            repository.Verify(r => r.Update(It.IsAny<Client>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Update_ShouldThrow_WhenClientNotFound()
+        {
+            var dto = new ClientDto { Name = "John", Phone = "123" };
+
+            var (service, repository) = CreateService(r =>
+                r.Setup(x => x.GetById(1)).Returns((Client)null));
+
+            Assert.ThrowsException<InvalidOperationException>(() =>
+                service.Update(1, dto));
+
+            repository.Verify(r => r.Update(It.IsAny<Client>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Update_ShouldMapAndCallRepository_WhenValid()
+        {
+            var existing = new Client { Id = 1, Name = "Old", Phone = "000" };
+            var dto = new ClientDto { Name = "New", Phone = "999" };
+
+            var (service, repository) = CreateService(r =>
+            {
+                r.Setup(x => x.GetById(1)).Returns(existing);
+                r.Setup(x => x.Update(It.Is<Client>(c =>
+                    c.Name == dto.Name &&
+                    c.Phone == dto.Phone)));
+            });
+
+            service.Update(1, dto);
+
+            repository.Verify(r => r.Update(It.Is<Client>(c =>
+                c.Name == dto.Name &&
+                c.Phone == dto.Phone)), Times.Once);
+            repository.Verify(r => r.GetById(1), Times.Once);
+
+        }
+
+        [TestMethod]
+        public void GetById_ShouldReturnMappedDto_WhenClientExists()
+        {
+            var client = new Client { Id = 1, Name = "John", Phone = "123" };
+
+            var (service, _) = CreateService(r =>
+                r.Setup(x => x.GetById(1)).Returns(client));
+
+            var result = service.GetById(1);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("John", result.Name);
+            Assert.AreEqual("123", result.Phone);
+        }
+
+        [TestMethod]
+        public void GetById_ShouldReturnNull_WhenClientDoesNotExist()
+        {
+            var (service, _) = CreateService(r =>
+                r.Setup(x => x.GetById(1)).Returns((Client)null));
+
+            var result = service.GetById(1);
+
+            Assert.IsNull(result);
+        }
+
     }
 }

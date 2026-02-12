@@ -58,5 +58,7 @@ namespace DogWalking.DL.Repositories
                 SoftDelete(entity);
             }
         }
+
+
     }
 }

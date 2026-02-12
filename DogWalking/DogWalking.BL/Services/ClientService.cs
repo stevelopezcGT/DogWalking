@@ -4,6 +4,7 @@ using DogWalking.DL.Entities;
 using DogWalking.DL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DogWalking.BL.Services
 {
@@ -45,9 +46,13 @@ namespace DogWalking.BL.Services
         /// Gets all clients.
         /// </summary>
         /// <returns>List of clients.</returns>
-        public List<Client> GetAll()
+        public List<ClientDto> GetAll()
         {
-            return _clientRepository.GetAll();
+
+            var clients = _clientRepository.GetAll();
+
+            return clients
+                .Select(c => MapToDto(c)).ToList();
         }
 
         /// <summary>
@@ -55,12 +60,13 @@ namespace DogWalking.BL.Services
         /// </summary>
         /// <param name="searchTerm">Search term.</param>
         /// <returns>Matching clients or all clients when the term is blank.</returns>
-        public List<Client> Search(string searchTerm)
+        public List<ClientDto> Search(string searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return _clientRepository.GetAll();
+            searchTerm = searchTerm?.Trim();
+            var clients = string.IsNullOrWhiteSpace(searchTerm) ? _clientRepository.GetAll() : _clientRepository.Search(searchTerm.Trim());
 
-            return _clientRepository.Search(searchTerm.Trim());
+            return clients
+               .Select(c => MapToDto(c)).ToList();
         }
 
         /// <summary>
@@ -69,7 +75,43 @@ namespace DogWalking.BL.Services
         /// <param name="clientId">Client id.</param>
         public void Delete(int clientId)
         {
+            _ = _clientRepository.GetById(clientId) ?? throw new InvalidOperationException("Client not found.");
             _clientRepository.Delete(clientId);
+        }
+
+        public ClientDto GetById(int id)
+        {
+            var client = _clientRepository.GetById(id);
+
+            if (client == null)
+                return null;
+
+            return MapToDto(client) ;
+        }
+
+        public void Update(int clientId, ClientDto clientDto)
+        {
+            if (clientDto == null)
+                throw new ArgumentNullException(nameof(clientDto));
+
+            ClientValidator.Validate(clientDto);
+
+            var client = _clientRepository.GetById(clientId) ?? throw new InvalidOperationException("Client not found.");
+
+            client.Name = clientDto.Name;
+            client.Phone = clientDto.Phone;
+
+            _clientRepository.Update(client);
+        }
+
+        private ClientDto MapToDto(Client c)
+        {
+            return new ClientDto
+            {
+                Name = c.Name,
+                Phone = c.Phone,
+                Id = c.Id
+            };
         }
     }
 }

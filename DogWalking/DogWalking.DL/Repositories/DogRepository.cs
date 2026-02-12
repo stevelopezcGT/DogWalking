@@ -47,6 +47,11 @@ namespace DogWalking.DL.Repositories
                 .ToList();
         }
 
+        /// <summary>
+        /// Gets dogs by client id.
+        /// </summary>
+        /// <param name="clientId">Client id.</param>
+        /// <returns>List of dogs for the client.</returns>
         public List<Dog> GetByClient(int clientId)
         {
             return Query()

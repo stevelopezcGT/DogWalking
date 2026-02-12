@@ -26,5 +26,14 @@ namespace DogWalking.DL.Repositories.Base
         /// </summary>
         /// <param name="entity">Entity to remove.</param>
         void SoftDelete(T entity);
+
+        /// <summary>
+        /// Gets an entity by id.
+        /// </summary>
+        /// <param name="id">Entity id.</param>
+        /// <returns>Matching entity or <c>null</c>.</returns>
+        T GetById(int id);
+
+
     }
 }

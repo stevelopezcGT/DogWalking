@@ -15,7 +15,7 @@ namespace DogWalking.DL.Repositories
         /// <summary>
         /// Initializes a new instance of <see cref="ClientRepository"/>.
         /// </summary>
-        public ClientRepository() : base(new DogWalkingContext())
+        public ClientRepository( DogWalkingContext ctx) : base(ctx)
         {
         }
 
