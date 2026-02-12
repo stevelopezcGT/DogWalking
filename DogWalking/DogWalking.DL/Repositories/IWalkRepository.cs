@@ -34,6 +34,13 @@ namespace DogWalking.DL.Repositories
         void Delete(int walkId);
 
         /// <summary>
+        /// Gets walks by dog id.
+        /// </summary>
+        /// <param name="dogId">Dog id.</param>
+        /// <returns>List of walks for the dog.</returns>
+        List<Walk> GetByDog(int dogId);
+
+        /// <summary>
         /// Gets a walk by id.
         /// </summary>
         /// <param name="walkId">Walk id.</param>

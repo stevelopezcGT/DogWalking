@@ -34,7 +34,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.pnlGrid = new System.Windows.Forms.Panel();
             this.dgvDogs = new System.Windows.Forms.DataGridView();
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clientNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClientName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.breedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,9 +63,9 @@ namespace DogWalking.WinForms.Forms.Dogs
             // lblMessage
             // 
             this.lblMessage.ForeColor = System.Drawing.Color.Red;
-            this.lblMessage.Location = new System.Drawing.Point(0, 315);
+            this.lblMessage.Location = new System.Drawing.Point(3, 3);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(587, 23);
+            this.lblMessage.Size = new System.Drawing.Size(722, 23);
             this.lblMessage.TabIndex = 8;
             this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -78,7 +78,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(728, 497);
+            this.panel1.Size = new System.Drawing.Size(728, 521);
             this.panel1.TabIndex = 9;
             // 
             // pnlGrid
@@ -87,7 +87,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGrid.Location = new System.Drawing.Point(0, 134);
             this.pnlGrid.Name = "pnlGrid";
-            this.pnlGrid.Size = new System.Drawing.Size(728, 283);
+            this.pnlGrid.Size = new System.Drawing.Size(728, 290);
             this.pnlGrid.TabIndex = 20;
             // 
             // dgvDogs
@@ -100,7 +100,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.dgvDogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDogs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
-            this.clientNameDataGridViewTextBoxColumn,
+            this.ClientName,
             this.nameDataGridViewTextBoxColumn,
             this.breedDataGridViewTextBoxColumn,
             this.ageDataGridViewTextBoxColumn});
@@ -112,7 +112,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.dgvDogs.Name = "dgvDogs";
             this.dgvDogs.ReadOnly = true;
             this.dgvDogs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDogs.Size = new System.Drawing.Size(728, 283);
+            this.dgvDogs.Size = new System.Drawing.Size(728, 290);
             this.dgvDogs.TabIndex = 12;
             this.dgvDogs.SelectionChanged += new System.EventHandler(this.dgvDogs_SelectionChanged);
             // 
@@ -123,12 +123,12 @@ namespace DogWalking.WinForms.Forms.Dogs
             this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
             this.idDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // clientNameDataGridViewTextBoxColumn
+            // ClientName
             // 
-            this.clientNameDataGridViewTextBoxColumn.DataPropertyName = "ClientName";
-            this.clientNameDataGridViewTextBoxColumn.HeaderText = "Client";
-            this.clientNameDataGridViewTextBoxColumn.Name = "ClientName";
-            this.clientNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.ClientName.DataPropertyName = "ClientName";
+            this.ClientName.HeaderText = "Client";
+            this.ClientName.Name = "ClientName";
+            this.ClientName.ReadOnly = true;
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -222,14 +222,15 @@ namespace DogWalking.WinForms.Forms.Dogs
             // pnlFooter
             // 
             this.pnlFooter.Controls.Add(this.separator);
+            this.pnlFooter.Controls.Add(this.lblMessage);
             this.pnlFooter.Controls.Add(this.btnClose);
             this.pnlFooter.Controls.Add(this.btnDelete);
             this.pnlFooter.Controls.Add(this.btnEdit);
             this.pnlFooter.Controls.Add(this.btnNew);
             this.pnlFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlFooter.Location = new System.Drawing.Point(0, 417);
+            this.pnlFooter.Location = new System.Drawing.Point(0, 424);
             this.pnlFooter.Name = "pnlFooter";
-            this.pnlFooter.Size = new System.Drawing.Size(728, 80);
+            this.pnlFooter.Size = new System.Drawing.Size(728, 97);
             this.pnlFooter.TabIndex = 16;
             // 
             // separator
@@ -243,7 +244,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             // btnClose
             // 
             this.btnClose.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btnClose.Location = new System.Drawing.Point(597, 24);
+            this.btnClose.Location = new System.Drawing.Point(596, 45);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(120, 40);
             this.btnClose.TabIndex = 6;
@@ -253,7 +254,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(268, 24);
+            this.btnDelete.Location = new System.Drawing.Point(267, 45);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(120, 40);
             this.btnDelete.TabIndex = 5;
@@ -263,7 +264,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(142, 24);
+            this.btnEdit.Location = new System.Drawing.Point(141, 45);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(120, 40);
             this.btnEdit.TabIndex = 4;
@@ -273,7 +274,7 @@ namespace DogWalking.WinForms.Forms.Dogs
             // 
             // btnNew
             // 
-            this.btnNew.Location = new System.Drawing.Point(17, 24);
+            this.btnNew.Location = new System.Drawing.Point(16, 45);
             this.btnNew.Name = "btnNew";
             this.btnNew.Size = new System.Drawing.Size(120, 40);
             this.btnNew.TabIndex = 3;
@@ -285,9 +286,8 @@ namespace DogWalking.WinForms.Forms.Dogs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(728, 497);
+            this.ClientSize = new System.Drawing.Size(728, 521);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.lblMessage);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Name = "frmDogs";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -329,5 +329,6 @@ namespace DogWalking.WinForms.Forms.Dogs
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn breedDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ageDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClientName;
     }
 }

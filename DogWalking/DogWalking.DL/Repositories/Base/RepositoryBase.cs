@@ -34,7 +34,7 @@ namespace DogWalking.DL.Repositories.Base
         }
 
         /// <summary>
-        /// Gets a queryable source with active entities only.
+        /// Returns a base query applying soft-delete filtering (IsActive = true).
         /// </summary>
         /// <returns>Queryable active entities.</returns>
         protected IQueryable<T> Query()
@@ -63,6 +63,7 @@ namespace DogWalking.DL.Repositories.Base
                 throw new System.ArgumentNullException(nameof(entity));
             }
 
+            // Automatically sets creation audit fields before persisting.
             entity.CreatedAt = DateTime.UtcNow;
             entity.CreatedBy = GetCurrentUser();
             entity.IsActive = true;
@@ -80,6 +81,7 @@ namespace DogWalking.DL.Repositories.Base
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
+            // Automatically updates modification audit fields before persisting.
             entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedBy = GetCurrentUser();
 
@@ -88,9 +90,9 @@ namespace DogWalking.DL.Repositories.Base
         }
 
         /// <summary>
-        /// Removes an entity and saves changes.
+        /// Soft deletes an entity by marking it inactive and updating audit fields.
         /// </summary>
-        /// <param name="entity">Entity to remove.</param>
+        /// <param name="entity">Entity to soft delete.</param>
         public virtual void SoftDelete(T entity)
         {
             if (entity == null)
@@ -98,6 +100,7 @@ namespace DogWalking.DL.Repositories.Base
                 throw new System.ArgumentNullException(nameof(entity));
             }
 
+            // Performs soft delete by deactivating the row and stamping update audit fields.
             entity.IsActive = false;
             entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedBy = GetCurrentUser();

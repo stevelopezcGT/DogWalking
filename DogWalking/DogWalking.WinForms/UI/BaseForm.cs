@@ -53,6 +53,11 @@ namespace DogWalking.WinForms.UI
             _worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
         }
 
+        /// <summary>
+        /// Executes background work using BackgroundWorker and invokes completion on the UI thread.
+        /// </summary>
+        /// <param name="work">Work to execute on a background thread.</param>
+        /// <param name="onCompleted">Optional callback executed on the UI thread after successful completion.</param>
         protected void ExecuteAsync(Action work, Action onCompleted = null)
         {
             if (_worker.IsBusy)

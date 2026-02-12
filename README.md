@@ -2,14 +2,14 @@
 
 ## Overview
 
-DogWalking is a desktop ERP-style application built with **C# and .NET Framework 4.8.1**.
+DogWalking is a Windows Forms (WinForms) desktop application built with **C# and .NET Framework 4.8.1**.
 
-The system simulates a small business workflow to manage:
+It implements a small “dog walking business” workflow to manage:
 
-- Clients  
-- Dogs  
-- Dog walks  
-- Authentication and login  
+- **Clients** (name, phone)
+- **Dogs** (name, breed, age, linked to a client)
+- **Walks** (scheduled **date + time**, duration, linked to a dog and therefore to a client)
+- **Authentication / login**
 
 The solution follows a clean layered architecture:
 
@@ -21,13 +21,89 @@ Business Layer (Services + Validation)
 Data Layer (EF6 + Repositories + Migrations)
 ```
 
-This project was developed as a code-challenge style solution focused on:
+This repository was built as a **code-challenge** submission with emphasis on:
 
-- Explicit layering  
-- Clean separation of concerns  
-- Testable business logic  
-- Controlled multithreading  
-- Pragmatic maintainability  
+- Explicit layering and separation of concerns
+- Testable business logic (services + validators)
+- Controlled multithreading for WinForms responsiveness
+- Pragmatic maintainability aligned with long-lived ERP systems
+
+---
+
+## Challenge Requirements Coverage
+
+### 1) Form Design
+
+The UI implements the required fields across the domain forms:
+
+- **Client**: name, phone
+- **Dog**: name, breed, age
+- **Walk**: walk date (**date + time**), duration, and selection of the related dog (and client through cascading selection)
+
+Buttons implemented follow the challenge intent:
+
+- **Save** (Create/Update) on edit forms
+- **Delete** on list forms (**soft delete**)
+- **Exit/Close** to close the current form
+
+> Note: “Clear” is handled via form-level reset patterns (new record flow / reloading) rather than an explicit “Clear” button on every screen. Validation and error handling are explicit and user-facing.
+
+### 2) Functionality
+
+- **Validation** is implemented in the Business Layer via dedicated validators per DTO.
+- **Save** persists to the database and refreshes the list view on completion.
+- **Delete** removes the item from active listings using **soft delete** (`IsActive = false`).
+- **Exit/Close** closes the form.
+- **Error handling** is centralized in `BaseForm.OnAsyncError(...)`, displaying messages in the UI (`lblMessage`).
+
+### 3) Data Persistence
+
+- Persistence is implemented using **SQL Server LocalDB** with **Entity Framework 6 (Code First + Migrations)**.
+- The database is created and migrated automatically on application startup.
+- Data remains available after closing and reopening the application.
+
+### 4) Useful Features
+
+- **List screens** for Clients / Dogs / Walks provide retrieval of saved entries.
+- **Search** is implemented on list screens.
+- **Login flow** is implemented (seeded demo user).
+- **Dog walk creation** supports a realistic ERP flow, including **cascading selection** (Client → Dog).
+
+### 5) Pre-requirements
+
+- Visual Studio (recommended for .NET Framework WinForms)
+- SQL Server LocalDB
+- Git (GitHub repository)
+
+### 6) Delivery Expectations
+
+- “Commit early, commit often” was followed during development.
+- Unit tests are included (MSTest + Moq).
+- Documentation (this README + inline XML docs) describes architecture and trade-offs.
+- AI usage is explicitly disclosed (see below).
+
+---
+
+## How to Review This Project
+
+For technical reviewers, the most relevant areas to inspect are:
+
+- **`BaseForm`**: BackgroundWorker encapsulation (`ExecuteAsync(work, onCompleted)`) and error handling
+- **`ServiceFactory`**: manual composition and short-lived `DbContext` boundaries
+- **Walk module UX**: **Client → Dog cascading selection** and state/event sequencing
+- **`RepositoryBase`**: soft delete (`IsActive`) filtering and audit field handling
+- **Deletion business rules**: BL-level integrity checks (Client↔Dogs, Dog↔Walks)
+- **Unit tests**: service behavior + validator tests using strict mocks
+
+These areas reflect the core architectural decisions and trade-offs described in this document.
+
+---
+
+## Why .NET Framework 4.8.1 + EF6?
+
+The stack was intentionally chosen to reflect real-world **legacy ERP environments** where **WinForms + EF6** are still widely used and maintained.
+
+The goal of this challenge is to demonstrate clean architecture and maintainability within a realistic enterprise desktop context, rather than modern web-first tooling.
 
 ---
 
@@ -35,23 +111,23 @@ This project was developed as a code-challenge style solution focused on:
 
 ### UI Layer – `DogWalking.WinForms`
 
-- Windows Forms (WinForms)
+- WinForms UI
 - `BaseForm` encapsulating BackgroundWorker execution
 - Explicit service usage through `ServiceFactory`
 - No direct repository usage in UI
-- DTO-only interaction (entities never exposed to UI)
-- Controlled async execution via `ExecuteAsync`
-- ERP-style cascading selection (Client → Dog) in Walk module
+- DTO-only interaction (entities are never exposed to UI)
+- Controlled background execution via `ExecuteAsync`
+- ERP-style cascading selection in Walk module (Client → Dog)
 
 ### Business Layer – `DogWalking.BL`
 
-- DTOs (ClientDto, DogDto, WalkDto, etc.)
+- DTOs (`ClientDto`, `DogDto`, `WalkDto`, etc.)
 - Services:
   - `AuthService`
   - `ClientService`
   - `DogService`
   - `WalkService`
-- Explicit validators:
+- Validators:
   - `LoginValidator`
   - `ClientValidator`
   - `DogValidator`
@@ -59,53 +135,59 @@ This project was developed as a code-challenge style solution focused on:
 
 Services:
 
-- Validate input  
-- Orchestrate repository calls  
-- Map entities ↔ DTOs  
-- Do not depend directly on EF  
-- Are fully unit-testable  
+- Validate input
+- Orchestrate repository calls
+- Map entities ↔ DTOs
+- Do not depend directly on EF
+- Are unit-testable without database dependency
+- Enforce business rules (including safe deletion constraints)
 
 ### Data Layer – `DogWalking.DL`
 
-- Entity Framework 6 (Code First)
+- EF6 Code First + Migrations
 - `DogWalkingContext`
 - Repository pattern (generic base + specific repositories)
-- Soft delete support (`IsActive`)
-- Audit fields (CreatedAt, UpdatedAt, CreatedBy, UpdatedBy)
-- Automatic audit population using application session
-- EF migrations with seed configuration
+- Soft delete via `IsActive`
+- Audit fields (`CreatedAt`, `UpdatedAt`, `CreatedBy`, `UpdatedBy`)
+- Automatic audit population via application session
+
+### Shared – `DogWalking.Common`
+
+- `AppSession` used to capture the authenticated username
+- Enables audit fields to store the real current user without creating a dependency from DL → UI
 
 ---
 
 ## Current Technical Features
 
-- Repository-based data access
-- Soft delete implemented at entity level
-- Automatic audit tracking (CreatedBy / UpdatedBy)
-- Shared application session for current user tracking
+- Repository-based data access (EF6)
+- Soft delete implemented consistently (`IsActive` filtered at repository base)
+- Audit fields automatically managed (Created/Updated timestamps and user)
 - Login flow (`admin/admin` seeded via migrations)
-- Clients, Dogs, and Walks fully integrated in UI
-- Cascading dropdown logic in Walk module (Client → Dog)
-- Date + time selection for walks (US format: MM/dd/yyyy hh:mm tt)
+- Clients / Dogs / Walks modules integrated end-to-end (UI → BL → DL)
+- Walk scheduling supports **date + time** selection (US format: `MM/dd/yyyy hh:mm tt`)
+- Walk creation supports ERP cascading selection **Client → Dog**
+- Safe deletion rules enforced in BL:
+  - A **Client cannot be deleted** if it has **active Dogs**
+  - A **Dog cannot be deleted** if it has **active Walks**
 - DTO boundary enforced between layers
-- Service and validator unit test coverage
-- BackgroundWorker-based async execution pattern
+- Unit tests for services and validators (MSTest + Moq, strict behavior)
 - XML documentation standardized across BL/DL/tests
 
 ---
 
 ## Multithreading Strategy
 
-Instead of using `async/await`, the UI uses a **BackgroundWorker encapsulated inside BaseForm**.
+Instead of `async/await`, the UI uses a **BackgroundWorker encapsulated inside BaseForm** to keep the interface responsive.
 
 ### Trade-off
 
 | Option | Chosen | Reason |
 |--------|--------|--------|
 | async/await (Task-based) | ❌ | Modern but less aligned with legacy ERP WinForms environments |
-| BackgroundWorker encapsulated | ✅ | Explicit, predictable, common in long-lived WinForms ERP systems |
+| BackgroundWorker encapsulated | ✅ | Explicit, predictable, and common in long-lived WinForms ERP systems |
 
-All async operations are executed through:
+All background work is executed through:
 
 ```csharp
 ExecuteAsync(work, onCompleted);
@@ -140,22 +222,36 @@ The implementation preserves:
 
 ---
 
+## Safe Deletion Business Rules (ERP Integrity)
+
+In ERP-style systems, parent/child lifecycles must remain consistent to avoid “orphan” records.
+
+This solution enforces deletion constraints in the **Business Layer** (not in UI and not in EF mappings):
+
+- **Clients** can only be deleted if they have **no active Dogs**
+- **Dogs** can only be deleted if they have **no active Walks**
+
+### Trade-off
+
+| Approach | Chosen | Reason |
+|----------|--------|--------|
+| Cascade soft delete | ❌ | Risk of hiding too much data and increasing side effects |
+| Block deletion if children exist | ✅ | Predictable ERP behavior and preserves integrity |
+
+When a deletion is blocked, the BL throws a clear exception and the UI displays the message using the existing error handling flow.
+
+---
+
 ## Repository Pattern & DTO Boundary
 
 ### Trade-off: Expose Entities vs Use DTOs
 
 | Approach | Chosen | Reason |
 |----------|--------|--------|
-| Return EF entities to UI | ❌ | Couples UI to data layer |
-| Return DTOs from services | ✅ | Clean separation of concerns |
+| Return EF entities to UI | ❌ | Couples UI to data layer and increases fragility |
+| Return DTOs from services | ✅ | Maintains clean separation and improves testability |
 
-All services:
-
-- Accept DTOs  
-- Return DTOs  
-- Internally map to entities  
-
-The UI never references EF entities.
+All services accept and return DTOs, mapping internally to entities. The UI never references EF entities.
 
 ---
 
@@ -164,10 +260,8 @@ The UI never references EF entities.
 Entities include:
 
 - `IsActive`
-- `CreatedAt`
-- `UpdatedAt`
-- `CreatedBy`
-- `UpdatedBy`
+- `CreatedAt`, `UpdatedAt`
+- `CreatedBy`, `UpdatedBy`
 
 Instead of physically deleting records, repositories perform soft delete.
 
@@ -178,29 +272,24 @@ Instead of physically deleting records, repositories perform soft delete.
 | Hard delete | ❌ | Data loss risk |
 | Soft delete | ✅ | Safer, enterprise-aligned pattern |
 
-Filtering is handled at repository level.
+Filtering is handled at repository level so inactive rows do not show in queries.
 
-Audit fields are automatically populated using the shared `AppSession` context, without introducing UI dependencies into the data layer.
+Audit fields are automatically populated using the shared `AppSession` context.
 
 ---
 
 ## ServiceFactory vs IoC Container
 
-The application does **not** use a dependency injection container.
+This solution does **not** use a dependency injection container.
 
 ### Trade-off
 
 | Approach | Chosen | Reason |
 |----------|--------|--------|
-| Full IoC container | ❌ | Adds unnecessary complexity for a WinForms challenge |
-| Manual factory composition | ✅ | Explicit, readable, test-friendly |
+| Full IoC container | ❌ | Adds complexity that is unnecessary for this scope |
+| Manual factory composition | ✅ | Explicit, readable, and test-friendly for WinForms |
 
-The `ServiceFactory` ensures:
-
-- Short-lived `DbContext`
-- No context lifetime leakage
-- Clean separation
-- Predictable instantiation
+`ServiceFactory` ensures short-lived `DbContext` usage and predictable composition.
 
 ---
 
@@ -212,27 +301,25 @@ The `ServiceFactory` ensures:
 - Validator testing
 - No EF dependency in tests
 
-Covered areas:
+Covered areas include:
 
-- Add / Update / Delete
+- Add / Update / Delete (including deletion constraints)
 - GetAll / Search / GetById
-- Validation failures
-- Edge cases
+- Validation failures and success cases
+- Edge cases (null/empty/whitespace)
 - Repository interaction verification
-
-The Business Layer is fully testable without infrastructure dependencies.
 
 ---
 
 ## Database and Migrations
 
-Database initialization:
+Database initialization uses:
 
 ```csharp
 MigrateDatabaseToLatestVersion<DogWalkingContext, Configuration>
 ```
 
-Seed includes:
+Seed includes a demo user:
 
 - Username: `admin`
 - Password: `admin`
@@ -241,61 +328,14 @@ LocalDB is used for reproducibility and ease of setup.
 
 ---
 
-## Architecture Summary for Reviewers
-
-This solution intentionally demonstrates:
-
-- Clear UI → BL → DL separation
-- DTO boundary enforcement
-- Explicit validation per use case
-- Controlled background execution model for WinForms
-- Repository abstraction over EF6
-- Soft delete and audit-ready entities
-- ERP-style cascading dropdown behavior
-- Service-level unit testing without database dependency
-
-Design priorities were:
-
-1. Predictability over over-engineering  
-2. Explicitness over hidden magic  
-3. Testability over convenience  
-4. Enterprise-aligned WinForms patterns  
-
-The code avoids unnecessary frameworks and focuses on clarity, maintainability, and correctness.
-
----
-
-## Development Philosophy
-
-This project was implemented **manually**, following:
-
-- Clean layering
-- Explicit validation
-- Controlled multithreading
-- DTO boundary enforcement
-- ERP-style UI state management
-- Test-driven behavior validation
-
-No scaffolding generators or auto-architecture tools were used.
-
-Patterns applied reflect modern best practices adapted to a WinForms ERP context.
-
----
-
-## Use of AI
-
-AI tools were used **only as documentation and review assistants** to:
-
-- Refine documentation clarity  
-- Review architectural consistency  
-- Identify potential edge cases  
-- Improve explanatory structure  
-
-All implementation, architectural decisions, and code structure were designed and written manually.
-
----
-
 ## Build and Run
+
+### Prerequisites
+
+- Visual Studio (recommended for .NET Framework WinForms)
+- SQL Server LocalDB installed and available
+
+### Build
 
 From solution root:
 
@@ -303,7 +343,9 @@ From solution root:
 dotnet build DogWalking/DogWalking.sln -c Debug
 ```
 
-Run via Visual Studio (recommended for .NET Framework WinForms), or:
+### Run
+
+Run via Visual Studio, or execute the built binary:
 
 ```powershell
 DogWalking/DogWalking.WinForms/bin/Debug/DogWalking.WinForms.exe
@@ -322,12 +364,36 @@ All service and validator tests pass locally.
 
 ---
 
+## Development Philosophy
+
+This project was implemented **manually**, applying:
+
+- Clean layering
+- Explicit validation
+- Controlled multithreading
+- DTO boundary enforcement
+- ERP-style UI state management
+- Unit-testable BL behavior
+
+No scaffolding generators or auto-architecture tools were used. Patterns applied reflect modern best practices adapted to WinForms ERP constraints.
+
+---
+
+## Use of AI
+
+AI tools were used as a **documentation and architectural review assistant only**.
+
+- No code generators or scaffolding tools were used.
+- All implementation, structure, layering decisions, and trade-offs were **manually designed and implemented**.
+
+---
+
 ## Known Limitations
 
-- Authentication is basic (no hashing for demo purposes)
+- Authentication is basic (no password hashing; demo only)
 - No role-based authorization
 - No advanced reporting
-- No advanced filtering or pagination
+- No advanced filtering/pagination
 - UI styling intentionally minimal
 
-The focus of this project is architectural clarity, correctness, and maintainability.
+This project prioritizes clarity, correctness, and architectural discipline over feature density, reflecting how long-lived WinForms ERP systems are typically designed and maintained.

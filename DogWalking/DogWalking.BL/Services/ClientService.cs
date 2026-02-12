@@ -14,14 +14,17 @@ namespace DogWalking.BL.Services
     public class ClientService
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IDogRepository _dogRepository;
 
         /// <summary>
         /// Initializes a new instance of <see cref="ClientService"/>.
         /// </summary>
         /// <param name="clientRepository">Client repository instance.</param>
-        public ClientService(IClientRepository clientRepository)
+        /// <param name="dogRepository">Dog repository instance.</param>
+        public ClientService(IClientRepository clientRepository, IDogRepository dogRepository)
         {
             _clientRepository = clientRepository ?? throw new ArgumentNullException(nameof(clientRepository));
+            _dogRepository = dogRepository ?? throw new ArgumentNullException(nameof(dogRepository));
         }
 
         /// <summary>
@@ -76,9 +79,21 @@ namespace DogWalking.BL.Services
         public void Delete(int clientId)
         {
             _ = _clientRepository.GetById(clientId) ?? throw new InvalidOperationException("Client not found.");
+
+            var dogs = _dogRepository
+                .GetByClient(clientId);
+
+            if (dogs.Any())
+                throw new InvalidOperationException("Cannot delete a client that has active dogs.");
+
             _clientRepository.Delete(clientId);
         }
 
+        /// <summary>
+        /// Returns a client by id when active, or <c>null</c> when not found.
+        /// </summary>
+        /// <param name="id">Client identifier.</param>
+        /// <returns>Client data for the requested id, or <c>null</c>.</returns>
         public ClientDto GetById(int id)
         {
             var client = _clientRepository.GetById(id);
@@ -89,6 +104,11 @@ namespace DogWalking.BL.Services
             return MapToDto(client) ;
         }
 
+        /// <summary>
+        /// Validates and updates an existing client using the provided DTO.
+        /// </summary>
+        /// <param name="clientId">Client identifier.</param>
+        /// <param name="clientDto">Updated client data.</param>
         public void Update(int clientId, ClientDto clientDto)
         {
             if (clientDto == null)

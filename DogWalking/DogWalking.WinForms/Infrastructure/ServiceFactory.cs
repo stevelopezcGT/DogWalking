@@ -11,8 +11,9 @@ namespace DogWalking.WinForms.Infrastructure
         {
             using (var ctx = new DogWalkingContext())
             {
-                var repo = new ClientRepository(ctx);
-                var service = new ClientService(repo);
+                var clientRepo = new ClientRepository(ctx);
+                var dogRepo = new DogRepository(ctx);
+                var service = new ClientService(clientRepo, dogRepo);
 
                 action(service);
             }
@@ -22,8 +23,9 @@ namespace DogWalking.WinForms.Infrastructure
         {
             using (var ctx = new DogWalkingContext())
             {
-                var repo = new ClientRepository(ctx);
-                var service = new ClientService(repo);
+                var clientRepo = new ClientRepository(ctx);
+                var dogRepo = new DogRepository(ctx);
+                var service = new ClientService(clientRepo, dogRepo);
 
                 return func(service);
             }
@@ -55,8 +57,9 @@ namespace DogWalking.WinForms.Infrastructure
         {
             using (var ctx = new DogWalkingContext())
             {
-                var repo = new DogRepository(ctx);
-                var service = new DogService(repo);
+                var dogRepo = new DogRepository(ctx);
+                var walkRepo = new WalkRepository(ctx);
+                var service = new DogService(dogRepo, walkRepo);
 
                 action(service);
             }
@@ -66,8 +69,9 @@ namespace DogWalking.WinForms.Infrastructure
         {
             using (var ctx = new DogWalkingContext())
             {
-                var repo = new DogRepository(ctx);
-                var service = new DogService(repo);
+                var dogRepo = new DogRepository(ctx);
+                var walkRepo = new WalkRepository(ctx);
+                var service = new DogService(dogRepo, walkRepo);
 
                 return func(service);
             }
