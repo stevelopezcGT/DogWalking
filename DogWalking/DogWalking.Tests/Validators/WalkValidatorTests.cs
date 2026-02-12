@@ -11,9 +11,6 @@ namespace DogWalking.Tests.Validators
     [TestClass]
     public class WalkValidatorTests
     {
-        /// <summary>
-        /// Creates a DTO with valid values.
-        /// </summary>
         private static WalkDto CreateValidDto()
         {
             return new WalkDto
@@ -24,9 +21,21 @@ namespace DogWalking.Tests.Validators
             };
         }
 
-        /// <summary>
-        /// Verifies validate throws when walk date is default.
-        /// </summary>
+        [TestMethod]
+        public void Validate_ShouldThrow_WhenDtoIsNull()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => WalkValidator.Validate(null));
+        }
+
+        [TestMethod]
+        public void Validate_ShouldThrow_WhenDogIdIsInvalid()
+        {
+            var dto = CreateValidDto();
+            dto.DogId = 0;
+
+            Assert.ThrowsException<ArgumentException>(() => WalkValidator.Validate(dto));
+        }
+
         [TestMethod]
         public void Validate_ShouldThrow_WhenWalkDateIsDefault()
         {
@@ -36,9 +45,6 @@ namespace DogWalking.Tests.Validators
             Assert.ThrowsException<ArgumentException>(() => WalkValidator.Validate(dto));
         }
 
-        /// <summary>
-        /// Verifies validate throws when duration is invalid.
-        /// </summary>
         [TestMethod]
         public void Validate_ShouldThrow_WhenDurationIsInvalid()
         {
@@ -48,9 +54,6 @@ namespace DogWalking.Tests.Validators
             Assert.ThrowsException<ArgumentException>(() => WalkValidator.Validate(dto));
         }
 
-        /// <summary>
-        /// Verifies validate passes for valid data.
-        /// </summary>
         [TestMethod]
         public void Validate_ShouldNotThrow_WhenDataIsValid()
         {

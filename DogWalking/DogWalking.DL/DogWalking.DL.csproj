@@ -90,6 +90,12 @@
       <DependentUpon>202602102330507_AddAuditFieldsAndSoftDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DowWalking.Common\DowWalking.Common.csproj">
+      <Project>{AD298C24-2279-453B-AC4A-16F99B8AC479}</Project>
+      <Name>DowWalking.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

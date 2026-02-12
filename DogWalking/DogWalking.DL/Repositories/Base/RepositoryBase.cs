@@ -1,3 +1,4 @@
+using DogWalking.Common;
 using DogWalking.DL.Context;
 using DogWalking.DL.Entities;
 using System;
@@ -29,7 +30,7 @@ namespace DogWalking.DL.Repositories.Base
         /// <returns>Current user identifier.</returns>
         protected virtual string GetCurrentUser()
         {
-            return "placeholder";
+            return AppSession.CurrentUsername ?? "system";
         }
 
         /// <summary>

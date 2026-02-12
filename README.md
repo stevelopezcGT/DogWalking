@@ -41,6 +41,7 @@ This project was developed as a code-challenge style solution focused on:
 - No direct repository usage in UI
 - DTO-only interaction (entities never exposed to UI)
 - Controlled async execution via `ExecuteAsync`
+- ERP-style cascading selection (Client → Dog) in Walk module
 
 ### Business Layer – `DogWalking.BL`
 
@@ -70,7 +71,8 @@ Services:
 - `DogWalkingContext`
 - Repository pattern (generic base + specific repositories)
 - Soft delete support (`IsActive`)
-- Audit fields (CreatedAt, UpdatedAt, etc.)
+- Audit fields (CreatedAt, UpdatedAt, CreatedBy, UpdatedBy)
+- Automatic audit population using application session
 - EF migrations with seed configuration
 
 ---
@@ -79,9 +81,12 @@ Services:
 
 - Repository-based data access
 - Soft delete implemented at entity level
-- Audit fields automatically managed
+- Automatic audit tracking (CreatedBy / UpdatedBy)
+- Shared application session for current user tracking
 - Login flow (`admin/admin` seeded via migrations)
-- Clients/Dogs/Walks forms integrated in UI
+- Clients, Dogs, and Walks fully integrated in UI
+- Cascading dropdown logic in Walk module (Client → Dog)
+- Date + time selection for walks (US format: MM/dd/yyyy hh:mm tt)
 - DTO boundary enforced between layers
 - Service and validator unit test coverage
 - BackgroundWorker-based async execution pattern
@@ -110,6 +115,31 @@ No UI logic runs inside background threads.
 
 ---
 
+## Cascading ERP Pattern (Client → Dog)
+
+The Walk module implements a dependent dropdown model:
+
+1. User selects a Client
+2. Dogs are dynamically filtered and loaded
+3. Dog selection becomes available
+4. Walk is created for the selected Dog
+
+This demonstrates:
+
+- State-aware UI handling
+- Dependent dataset loading
+- Controlled event sequencing
+- ERP-style master-detail behavior
+
+The implementation preserves:
+
+- Clean layering
+- DTO boundary
+- ExecuteAsync background execution
+- No repository leakage into UI
+
+---
+
 ## Repository Pattern & DTO Boundary
 
 ### Trade-off: Expose Entities vs Use DTOs
@@ -129,12 +159,15 @@ The UI never references EF entities.
 
 ---
 
-## Soft Delete Strategy
+## Soft Delete & Audit Strategy
 
 Entities include:
 
 - `IsActive`
-- Audit fields
+- `CreatedAt`
+- `UpdatedAt`
+- `CreatedBy`
+- `UpdatedBy`
 
 Instead of physically deleting records, repositories perform soft delete.
 
@@ -146,6 +179,8 @@ Instead of physically deleting records, repositories perform soft delete.
 | Soft delete | ✅ | Safer, enterprise-aligned pattern |
 
 Filtering is handled at repository level.
+
+Audit fields are automatically populated using the shared `AppSession` context, without introducing UI dependencies into the data layer.
 
 ---
 
@@ -216,6 +251,7 @@ This solution intentionally demonstrates:
 - Controlled background execution model for WinForms
 - Repository abstraction over EF6
 - Soft delete and audit-ready entities
+- ERP-style cascading dropdown behavior
 - Service-level unit testing without database dependency
 
 Design priorities were:
@@ -237,6 +273,7 @@ This project was implemented **manually**, following:
 - Explicit validation
 - Controlled multithreading
 - DTO boundary enforcement
+- ERP-style UI state management
 - Test-driven behavior validation
 
 No scaffolding generators or auto-architecture tools were used.
@@ -266,8 +303,7 @@ From solution root:
 dotnet build DogWalking/DogWalking.sln -c Debug
 ```
 
-Run via Visual Studio (recommended for .NET Framework WinForms),
-or:
+Run via Visual Studio (recommended for .NET Framework WinForms), or:
 
 ```powershell
 DogWalking/DogWalking.WinForms/bin/Debug/DogWalking.WinForms.exe

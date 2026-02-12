@@ -50,5 +50,49 @@ namespace DogWalking.WinForms.Infrastructure
                 return func(service);
             }
         }
+
+        public static void UseDogService(Action<DogService> action)
+        {
+            using (var ctx = new DogWalkingContext())
+            {
+                var repo = new DogRepository(ctx);
+                var service = new DogService(repo);
+
+                action(service);
+            }
+        }
+
+        public static TResult UseDogService<TResult>(Func<DogService, TResult> func)
+        {
+            using (var ctx = new DogWalkingContext())
+            {
+                var repo = new DogRepository(ctx);
+                var service = new DogService(repo);
+
+                return func(service);
+            }
+        }
+
+        public static void UseWalkService(Action<WalkService> action)
+        {
+            using (var ctx = new DogWalkingContext())
+            {
+                var repo = new WalkRepository(ctx);
+                var service = new WalkService(repo);
+
+                action(service);
+            }
+        }
+
+        public static TResult UseWalkService<TResult>(Func<WalkService, TResult> func)
+        {
+            using (var ctx = new DogWalkingContext())
+            {
+                var repo = new WalkRepository(ctx);
+                var service = new WalkService(repo);
+
+                return func(service);
+            }
+        }
     }
 }

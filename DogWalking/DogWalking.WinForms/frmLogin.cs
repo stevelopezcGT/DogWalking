@@ -1,4 +1,5 @@
 ﻿using DogWalking.BL.DTOs;
+using DogWalking.Common;
 using DogWalking.WinForms.Infrastructure;
 using DogWalking.WinForms.UI;
 using System;
@@ -18,6 +19,7 @@ namespace DogWalking.WinForms
             lblMessage.Text = string.Empty;
 
             var loginDto = new LoginDto { Username = txtUsername.Text.Trim(), Password = txtPassword.Text.Trim() };
+            AppSession.CurrentUsername = null;
 
             ExecuteAsync(
                 work: () =>
@@ -30,6 +32,7 @@ namespace DogWalking.WinForms
                 },
                 onCompleted: () =>
                 {
+                    AppSession.CurrentUsername = txtUsername.Text;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 });

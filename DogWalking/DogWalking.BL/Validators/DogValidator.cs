@@ -17,6 +17,9 @@ namespace DogWalking.BL.Validators
             if (string.IsNullOrWhiteSpace(dto.Name))
                 throw new ArgumentException("Dog name is required.");
 
+            if (dto.ClientId==0)
+                throw new ArgumentException("Client is required.");
+
             if (dto.Age <= 0)
                 throw new ArgumentException("Dog age must be greater than zero.");
         }

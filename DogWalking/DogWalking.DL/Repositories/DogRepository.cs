@@ -16,7 +16,7 @@ namespace DogWalking.DL.Repositories
         /// <summary>
         /// Initializes a new instance of <see cref="DogRepository"/>.
         /// </summary>
-        public DogRepository() : base(new DogWalkingContext())
+        public DogRepository(DogWalkingContext ctx) : base(ctx)
         {
         }
 
@@ -27,6 +27,7 @@ namespace DogWalking.DL.Repositories
         public List<Dog> GetAll()
         {
             return Query()
+                .Include(d => d.Client)
                 .AsNoTracking()
                 .ToList();
         }
@@ -39,12 +40,25 @@ namespace DogWalking.DL.Repositories
         public List<Dog> Search(string searchTerm)
         {
             return Query()
+                .Include(d => d.Client)
                 .AsNoTracking()
                 .Where(c =>
                     c.Name.Contains(searchTerm) ||
                     (c.Client.Name.Contains(searchTerm) && c.Client.IsActive)
                 )
                 .ToList();
+        }
+
+        /// <summary>
+        /// Gets a dog by id.
+        /// </summary>
+        /// <param name="dogId">Dog id.</param>
+        /// <returns>Matching dog or <c>null</c>.</returns>
+        public override Dog GetById(int dogId)
+        {
+            return Query()
+                .Include(d => d.Client)
+                .SingleOrDefault(d => d.Id == dogId);
         }
 
         /// <summary>

@@ -21,7 +21,7 @@
             //  to avoid creating duplicate seed data.
             if (!context.Users.Any(u => u.Username == "admin"))
             {
-                context.Users.Add(new User { Username = "admin", Password = "admin", CreatedAt= DateTime.Now, IsActive=true, UpdatedAt=DateTime.Now, CreatedBy="System", UpdatedBy="System" });
+                context.Users.Add(new User { Username = "admin", Password = "admin", CreatedAt= DateTime.UtcNow, IsActive=true, CreatedBy="System" });
             }
         }
     }
