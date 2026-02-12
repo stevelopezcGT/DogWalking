@@ -20,6 +20,11 @@ namespace DogWalking.DL.Repositories
         /// <returns>List of dogs.</returns>
         List<Dog> GetAll();
 
+        /// <summary>
+        /// Gets dogs by client id.
+        /// </summary>
+        /// <param name="clientId">Client id.</param>
+        /// <returns>List of dogs for the client.</returns>
         List<Dog> GetByClient(int clientId);
 
         /// <summary>
@@ -34,5 +39,12 @@ namespace DogWalking.DL.Repositories
         /// </summary>
         /// <param name="dogId">Dog id.</param>
         void Delete(int dogId);
+
+        /// <summary>
+        /// Gets a dog by id.
+        /// </summary>
+        /// <param name="dogId">Dog id.</param>
+        /// <returns>Matching dog or <c>null</c>.</returns>
+        Dog GetById(int dogId);
     }
 }

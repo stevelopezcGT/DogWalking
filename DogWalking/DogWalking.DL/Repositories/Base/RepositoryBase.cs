@@ -23,16 +23,29 @@ namespace DogWalking.DL.Repositories.Base
             _context = context ?? throw new System.ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// Gets the current user for audit fields.
+        /// </summary>
+        /// <returns>Current user identifier.</returns>
         protected virtual string GetCurrentUser()
         {
             return "placeholder";
         }
 
+        /// <summary>
+        /// Gets a queryable source with active entities only.
+        /// </summary>
+        /// <returns>Queryable active entities.</returns>
         protected IQueryable<T> Query()
         {
             return _context.Set<T>().Where(e => e.IsActive);
         }
 
+        /// <summary>
+        /// Gets an entity by id.
+        /// </summary>
+        /// <param name="id">Entity id.</param>
+        /// <returns>Matching entity or <c>null</c>.</returns>
         public virtual T GetById(int id)
         {
             return Query().SingleOrDefault(e => e.Id == id);
@@ -57,8 +70,10 @@ namespace DogWalking.DL.Repositories.Base
             _context.SaveChanges();
         }
 
-        
-
+        /// <summary>
+        /// Updates an entity and saves changes.
+        /// </summary>
+        /// <param name="entity">Entity to update.</param>
         public virtual void Update(T entity)
         {
             if (entity == null)

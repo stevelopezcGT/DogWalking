@@ -32,5 +32,18 @@ namespace DogWalking.DL.Repositories
         /// </summary>
         /// <param name="clientId">Client id.</param>
         void Delete(int clientId);
+
+        /// <summary>
+        /// Gets a client by id.
+        /// </summary>
+        /// <param name="clientId">Client id.</param>
+        /// <returns>Matching client or <c>null</c>.</returns>
+        Client GetById(int clientId);
+
+        /// <summary>
+        /// Updates a client.
+        /// </summary>
+        /// <param name="client">Client to update.</param>
+        void Update(Client client);
     }
 }

@@ -7,6 +7,7 @@ namespace DogWalking.BL.DTOs
     /// </summary>
     public class WalkDto
     {
+        public int Id { get; set; }
         /// <summary>
         /// Gets or sets the dog id.
         /// </summary>

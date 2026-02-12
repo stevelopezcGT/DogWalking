@@ -2,6 +2,7 @@
 {
     using DogWalking.DL.Context;
     using DogWalking.DL.Entities;
+    using System;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -20,7 +21,7 @@
             //  to avoid creating duplicate seed data.
             if (!context.Users.Any(u => u.Username == "admin"))
             {
-                context.Users.Add(new User { Username = "admin", Password = "admin" });
+                context.Users.Add(new User { Username = "admin", Password = "admin", CreatedAt= DateTime.Now, IsActive=true, UpdatedAt=DateTime.Now, CreatedBy="System", UpdatedBy="System" });
             }
         }
     }

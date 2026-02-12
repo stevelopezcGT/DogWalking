@@ -1,5 +1,7 @@
-﻿using DogWalking.DL.Context;
+﻿using DogWalking.BL.Services;
+using DogWalking.DL.Context;
 using DogWalking.DL.Migrations; // Add this using directive for Configuration
+using DogWalking.DL.Repositories;
 using System;
 using System.Data.Entity;
 using System.Windows.Forms;
@@ -41,7 +43,15 @@ namespace DogWalking.WinForms
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmLogin());
+
+            using (var login = new frmLogin())
+            {
+                if (login.ShowDialog() == DialogResult.OK)
+                {
+                    Application.Run(new frmMain());
+                }
+            }
         }
+       
     }
 }

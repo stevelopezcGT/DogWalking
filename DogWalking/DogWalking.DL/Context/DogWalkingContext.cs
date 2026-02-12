@@ -8,17 +8,35 @@ using System.Threading.Tasks;
 
 namespace DogWalking.DL.Context
 {
+    /// <summary>
+    /// Entity Framework database context for the DogWalking application.
+    /// </summary>
     public class DogWalkingContext : DbContext
     {
+        /// <summary>
+        /// Initializes a new instance of <see cref="DogWalkingContext"/>.
+        /// </summary>
         public DogWalkingContext() : base("DogWalkingDb")
         {
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
         }
 
+        /// <summary>
+        /// Gets or sets clients.
+        /// </summary>
         public DbSet<Client> Clients { get; set; }
+        /// <summary>
+        /// Gets or sets dogs.
+        /// </summary>
         public DbSet<Dog> Dogs { get; set; }
+        /// <summary>
+        /// Gets or sets walks.
+        /// </summary>
         public DbSet<Walk> Walks { get; set; }
+        /// <summary>
+        /// Gets or sets users.
+        /// </summary>
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
