@@ -23,9 +23,9 @@ namespace DogWalking.DL.Repositories
         /// <summary>
         /// Searches walks by term.
         /// </summary>
-        /// <param name="searchTerm">Search term.</param>
+        /// <param name="term">Search term by dog name.</param>
         /// <returns>Matching walks.</returns>
-        List<Walk> Search(string searchTerm);
+        List<Walk> Search(string term);
 
         /// <summary>
         /// Deletes a walk by id.

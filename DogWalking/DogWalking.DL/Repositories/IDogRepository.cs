@@ -46,5 +46,11 @@ namespace DogWalking.DL.Repositories
         /// <param name="dogId">Dog id.</param>
         /// <returns>Matching dog or <c>null</c>.</returns>
         Dog GetById(int dogId);
+
+        /// <summary>
+        /// Updates a dog.
+        /// </summary>
+        /// <param name="dog">Dog to update.</param>
+        void Update(Dog dog);
     }
 }

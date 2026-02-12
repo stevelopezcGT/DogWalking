@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalking.Tests", "DogWalking.Tests\DogWalking.Tests.csproj", "{6BDDCCF8-F2E1-448E-88E2-95C7B20F1329}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DowWalking.Common", "DowWalking.Common\DowWalking.Common.csproj", "{AD298C24-2279-453B-AC4A-16F99B8AC479}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{6BDDCCF8-F2E1-448E-88E2-95C7B20F1329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDDCCF8-F2E1-448E-88E2-95C7B20F1329}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDDCCF8-F2E1-448E-88E2-95C7B20F1329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD298C24-2279-453B-AC4A-16F99B8AC479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD298C24-2279-453B-AC4A-16F99B8AC479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD298C24-2279-453B-AC4A-16F99B8AC479}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD298C24-2279-453B-AC4A-16F99B8AC479}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

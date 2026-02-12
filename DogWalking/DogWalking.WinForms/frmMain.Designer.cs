@@ -61,12 +61,14 @@
             this.dogsToolStripMenuItem.Name = "dogsToolStripMenuItem";
             this.dogsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.dogsToolStripMenuItem.Text = "Dogs";
+            this.dogsToolStripMenuItem.Click += new System.EventHandler(this.dogsToolStripMenuItem_Click);
             // 
             // walksToolStripMenuItem
             // 
             this.walksToolStripMenuItem.Name = "walksToolStripMenuItem";
             this.walksToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.walksToolStripMenuItem.Text = "Walks";
+            this.walksToolStripMenuItem.Click += new System.EventHandler(this.walksToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 

@@ -74,6 +74,12 @@
     <Compile Include="Forms\Dogs\frmDogs.Designer.cs">
       <DependentUpon>frmDogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Dogs\frmDog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Dogs\frmDog.Designer.cs">
+      <DependentUpon>frmDog.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +98,12 @@
     <Compile Include="Forms\Walks\frmWalks.Designer.cs">
       <DependentUpon>frmWalks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Walks\frmWalk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Walks\frmWalk.Designer.cs">
+      <DependentUpon>frmWalk.cs</DependentUpon>
+    </Compile>
     <Compile Include="Infrastructure\ServiceFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +116,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Clients\frmClients.resx">
       <DependentUpon>frmClients.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Dogs\frmDog.resx">
+      <DependentUpon>frmDog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Dogs\frmDogs.resx">
+      <DependentUpon>frmDogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Walks\frmWalk.resx">
+      <DependentUpon>frmWalk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Walks\frmWalks.resx">
+      <DependentUpon>frmWalks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
@@ -147,6 +171,10 @@
     <ProjectReference Include="..\DogWalking.DL\DogWalking.DL.csproj">
       <Project>{FFA60A27-56D2-4377-8E5F-ABFC616EC7F6}</Project>
       <Name>DogWalking.DL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DowWalking.Common\DowWalking.Common.csproj">
+      <Project>{AD298C24-2279-453B-AC4A-16F99B8AC479}</Project>
+      <Name>DowWalking.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

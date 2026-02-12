@@ -66,6 +66,15 @@ namespace DogWalking.DL.Context
 
             #region Walk
             modelBuilder.Entity<Walk>()
+                    .HasRequired(w => w.Dog)
+                    .WithMany(d => d.Walks)
+                    .HasForeignKey(w => w.DogId);
+
+            modelBuilder.Entity<Walk>()
+                    .Property(x => x.WalkDate)
+                    .IsRequired();
+
+            modelBuilder.Entity<Walk>()
                     .Property(x => x.DurationMinutes)
                     .IsRequired(); 
             #endregion

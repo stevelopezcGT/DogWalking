@@ -14,6 +14,21 @@ namespace DogWalking.BL.DTOs
         public int DogId { get; set; }
 
         /// <summary>
+        /// Gets or sets the client id.
+        /// </summary>
+        public int ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the client name.
+        /// </summary>
+        public string ClientName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dog name.
+        /// </summary>
+        public string DogName { get; set; }
+
+        /// <summary>
         /// Gets or sets the walk date.
         /// </summary>
         public DateTime WalkDate { get; set; }
