@@ -62,6 +62,19 @@ namespace DogWalking.DL.Repositories
         }
 
         /// <summary>
+        /// Gets walks by dog id.
+        /// </summary>
+        /// <param name="dogId">Dog id.</param>
+        /// <returns>List of walks for the dog.</returns>
+        public List<Walk> GetByDog(int dogId)
+        {
+            return Query()
+                .AsNoTracking()
+                .Where(d => d.DogId == dogId)
+                .ToList();
+        }
+
+        /// <summary>
         /// Deletes a walk by id.
         /// </summary>
         /// <param name="walkId">Walk id.</param>

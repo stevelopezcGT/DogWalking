@@ -5,6 +5,7 @@ using DogWalking.DL.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 
 namespace DogWalking.Tests.Services
 {
@@ -17,12 +18,18 @@ namespace DogWalking.Tests.Services
         /// <summary>
         /// Creates a service instance with a strict repository mock.
         /// </summary>
-        private static (DogService Service, Mock<IDogRepository> Repository) CreateService(
-            Action<Mock<IDogRepository>> setup = null)
+        private static (
+            DogService Service,
+            Mock<IDogRepository> DogRepository,
+            Mock<IWalkRepository> WalkRepository) CreateService(
+            Action<Mock<IDogRepository>> dogSetup = null,
+            Action<Mock<IWalkRepository>> walkSetup = null)
         {
-            var repository = new Mock<IDogRepository>(MockBehavior.Strict);
-            setup?.Invoke(repository);
-            return (new DogService(repository.Object), repository);
+            var dogRepository = new Mock<IDogRepository>(MockBehavior.Strict);
+            var walkRepository = new Mock<IWalkRepository>(MockBehavior.Strict);
+            dogSetup?.Invoke(dogRepository);
+            walkSetup?.Invoke(walkRepository);
+            return (new DogService(dogRepository.Object, walkRepository.Object), dogRepository, walkRepository);
         }
 
         /// <summary>
@@ -31,7 +38,9 @@ namespace DogWalking.Tests.Services
         [TestMethod]
         public void Constructor_ShouldThrow_WhenRepositoryIsNull()
         {
-            Assert.ThrowsException<ArgumentNullException>(() => new DogService(null));
+            var walkRepository = new Mock<IWalkRepository>(MockBehavior.Strict);
+
+            Assert.ThrowsException<ArgumentNullException>(() => new DogService(null, walkRepository.Object));
         }
 
         /// <summary>
@@ -40,11 +49,12 @@ namespace DogWalking.Tests.Services
         [TestMethod]
         public void Add_ShouldThrow_WhenDtoIsNull()
         {
-            var (service, repository) = CreateService();
+            var (service, repository, walkRepository) = CreateService();
 
             Assert.ThrowsException<ArgumentNullException>(() => service.Add(null));
 
             repository.Verify(r => r.Add(It.IsAny<Dog>()), Times.Never);
+            walkRepository.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -53,12 +63,13 @@ namespace DogWalking.Tests.Services
         [TestMethod]
         public void Add_ShouldThrow_WhenNameIsInvalid()
         {
-            var (service, repository) = CreateService();
+            var (service, repository, walkRepository) = CreateService();
             var dto = new DogDto { ClientId = 1, Name = "", Breed = "Lab", Age = 3 };
 
             Assert.ThrowsException<ArgumentException>(() => service.Add(dto));
 
             repository.Verify(r => r.Add(It.IsAny<Dog>()), Times.Never);
+            walkRepository.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -67,12 +78,13 @@ namespace DogWalking.Tests.Services
         [TestMethod]
         public void Add_ShouldThrow_WhenAgeIsInvalid()
         {
-            var (service, repository) = CreateService();
+            var (service, repository, walkRepository) = CreateService();
             var dto = new DogDto { ClientId = 1, Name = "Rex", Breed = "Lab", Age = 0 };
 
             Assert.ThrowsException<ArgumentException>(() => service.Add(dto));
 
             repository.Verify(r => r.Add(It.IsAny<Dog>()), Times.Never);
+            walkRepository.VerifyNoOtherCalls();
         }
 
         /// <summary>
@@ -82,7 +94,7 @@ namespace DogWalking.Tests.Services
         public void Add_ShouldMapAndCallRepository_WhenDtoIsValid()
         {
             var dto = new DogDto { ClientId = 3, Name = "Rex", Breed = "Lab", Age = 4 };
-            var (service, repository) = CreateService(r =>
+            var (service, repository, walkRepository) = CreateService(dogSetup: r =>
                 r.Setup(x => x.Add(It.Is<Dog>(d =>
                     d.ClientId == dto.ClientId &&
                     d.Name == dto.Name &&
@@ -96,6 +108,39 @@ namespace DogWalking.Tests.Services
                 d.Name == dto.Name &&
                 d.Breed == dto.Breed &&
                 d.Age == dto.Age)), Times.Once);
+            walkRepository.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public void Delete_ShouldThrow_WhenActiveWalksExist()
+        {
+            var (service, dogRepository, walkRepository) = CreateService(
+                dogSetup: r => r.Setup(x => x.GetById(5)).Returns(new Dog { Id = 5, ClientId = 1, Name = "Rex", Breed = "Lab", Age = 3 }),
+                walkSetup: r => r.Setup(x => x.GetByDog(5)).Returns(new List<Walk> { new Walk { Id = 2, DogId = 5, DurationMinutes = 30, WalkDate = DateTime.Today } }));
+
+            Assert.ThrowsException<InvalidOperationException>(() => service.Delete(5));
+
+            dogRepository.Verify(r => r.GetById(5), Times.Once);
+            walkRepository.Verify(r => r.GetByDog(5), Times.Once);
+            dogRepository.Verify(r => r.Delete(It.IsAny<int>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void Delete_ShouldCallRepository_WhenNoActiveWalksExist()
+        {
+            var (service, dogRepository, walkRepository) = CreateService(
+                dogSetup: r =>
+                {
+                    r.Setup(x => x.GetById(5)).Returns(new Dog { Id = 5, ClientId = 1, Name = "Rex", Breed = "Lab", Age = 3 });
+                    r.Setup(x => x.Delete(5));
+                },
+                walkSetup: r => r.Setup(x => x.GetByDog(5)).Returns(new List<Walk>()));
+
+            service.Delete(5);
+
+            dogRepository.Verify(r => r.GetById(5), Times.Once);
+            walkRepository.Verify(r => r.GetByDog(5), Times.Once);
+            dogRepository.Verify(r => r.Delete(5), Times.Once);
         }
     }
 }
